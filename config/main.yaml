@@ -1,0 +1,7 @@
+service:
+  debug: true
+  logFile: "verification_code_service.log"
+
+JWT:
+  secret: "JWT_SECRET"
+  expirationTimeSeconds: 3600
