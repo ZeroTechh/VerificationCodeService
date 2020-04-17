@@ -23,7 +23,7 @@ func main() {
 	defer utils.HandlePanic(log)
 
 	grpcServer, listner := utils.CreateGRPCServer(
-		services.EmailVerificationSrv,
+		services.VerificationCodeService,
 		log,
 	)
 

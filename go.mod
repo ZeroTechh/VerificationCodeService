@@ -3,7 +3,7 @@ module github.com/ZeroTechh/VerificationCodeService
 go 1.14
 
 require (
-	github.com/ZeroTechh/VelocityCore v0.0.9
+	github.com/ZeroTechh/VelocityCore v0.0.23
 	github.com/ZeroTechh/blaze v0.1.6
 	github.com/ZeroTechh/hades v0.1.9
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
