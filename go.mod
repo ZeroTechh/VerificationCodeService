@@ -8,6 +8,8 @@ require (
 	github.com/ZeroTechh/hades v0.1.9
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/google/go-cmp v0.3.1 // indirect
+	github.com/graphql-go/graphql v0.7.9 // indirect
+	github.com/graphql-go/handler v0.2.3
 	github.com/stretchr/testify v1.4.0
 	go.uber.org/zap v1.14.1
 	golang.org/x/net v0.0.0-20191011234655-491137f69257 // indirect

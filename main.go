@@ -9,29 +9,27 @@ import (
 	"github.com/ZeroTechh/VelocityCore/utils"
 	"github.com/ZeroTechh/hades"
 
-	"github.com/ZeroTechh/VerificationCodeService/serviceHandler"
+	"github.com/ZeroTechh/VerificationCodeService/handler"
 )
 
-func main() {
-	// Loading the logger
-	config := hades.GetConfig("main.yaml", []string{"config"})
-	log := logger.GetLogger(
+var (
+	config = hades.GetConfig("main.yaml", []string{"config"})
+	log    = logger.GetLogger(
 		config.Map("service").Str("logFile"),
 		config.Map("service").Bool("debug"),
 	)
+)
 
+func main() {
 	defer utils.HandlePanic(log)
+	handler := handler.Handler{}
 
 	grpcServer, listner := utils.CreateGRPCServer(
 		services.VerificationCodeService,
 		log,
 	)
 
-	handler := serviceHandler.Handler{}
-
 	proto.RegisterVerificationCodeServer(grpcServer, handler)
-
-	log.Info("Service Started")
 	if err := grpcServer.Serve(*listner); err != nil {
 		log.Fatal("Service Failed With Error", zap.Error(err))
 	}
