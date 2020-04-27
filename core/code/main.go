@@ -8,35 +8,29 @@ import (
 )
 
 var (
-	config     = hades.GetConfig("main.yaml", []string{"config", "../config", "../../config"})
-	jwtConfig  = config.Map("JWT")
-	secret     = []byte(jwtConfig.Str("secret"))
-	expiration = time.Duration(int64(jwtConfig.Int("expirationTimeSeconds"))) * time.Second
+	config    = hades.GetConfig("main.yaml", []string{"config", "../config", "../../config"})
+	jwtConfig = config.Map("JWT")
+	secret    = []byte(jwtConfig.Str("secret"))
 )
 
-// Code is used to create and validate verification code
-type Code struct{}
-
-// Create is used to create a jwt for verification token
-func (code Code) Create(userID string) string {
-	claims := createClaims(userID)
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	tokenString, _ := token.SignedString(secret)
-	return tokenString
+// Create creates jwt as a verification code.
+func Create(userID string) (string, error) {
+	t := jwt.NewWithClaims(jwt.SigningMethodHS256, claims(userID))
+	return t.SignedString(secret)
 }
 
-// Validate is used to validate a jwt
-func (code Code) Validate(tokenString string) (bool, string) {
+// Validate validates a verification code.
+func Validate(token string) (bool, string) {
 	var claims Claims
-	token, err := jwt.ParseWithClaims(tokenString, &claims, jwtKeyFunc)
+
+	t, err := jwt.ParseWithClaims(token, &claims, jwtKeyFunc)
 	if err != nil {
 		return false, ""
 	}
 
-	expirationTime := time.Unix(claims.ExpirationUTC, 0)
-	if isExpired(expirationTime) {
+	if time.Now().After(time.Unix(claims.ExpirationUTC, 0)) {
 		return false, ""
 	}
 
-	return token.Valid, claims.UserID
+	return t.Valid, claims.UserID
 }

@@ -7,24 +7,28 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
-// isExpired is used to check if expirationTime has already occured
-func isExpired(expirationTime time.Time) bool {
-	return time.Now().After(expirationTime)
+var (
+	expiration = time.Duration(
+		int64(jwtConfig.Int("expirationTimeSeconds"))) * time.Second
+)
+
+// Claims stores claims of verification token
+type Claims struct {
+	UserID                     string
+	CreationUTC, ExpirationUTC int64
+	jwt.StandardClaims
 }
 
-// createClaims is used to create claims
-func createClaims(userID string) Claims {
-	creationTime := time.Now()
-	expirationTime := creationTime.Add(expiration)
-
+// claims creates claims for verification token.
+func claims(userID string) Claims {
 	return Claims{
 		UserID:        userID,
-		CreationUTC:   creationTime.Unix(),
-		ExpirationUTC: expirationTime.Unix(),
+		CreationUTC:   time.Now().Unix(),
+		ExpirationUTC: time.Now().Add(expiration).Unix(),
 	}
 }
 
-// jwtKeyFunc is used to sign a token
+// jwtKeyFunc signs a token.
 func jwtKeyFunc(token *jwt.Token) (interface{}, error) {
 	if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 		return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
