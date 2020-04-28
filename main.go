@@ -22,14 +22,11 @@ var (
 
 func main() {
 	defer utils.HandlePanic(log)
-	handler := handler.Handler{}
-
 	grpcServer, listner := utils.CreateGRPCServer(
 		services.VerificationCodeService,
 		log,
 	)
-
-	proto.RegisterVerificationCodeServer(grpcServer, handler)
+	proto.RegisterVerificationCodeServer(grpcServer, handler.Handler{)
 	if err := grpcServer.Serve(*listner); err != nil {
 		log.Fatal("Service Failed With Error", zap.Error(err))
 	}

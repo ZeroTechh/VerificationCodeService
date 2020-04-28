@@ -15,7 +15,7 @@ code, err := client.Create(ctx, &proto.UserData{UserID: "User id"})
 
 ### Validate
 
-Validates jwt as a verification token and returns userID
+Validates jwt as a verification token and returns userID.
 
 ```go
 userData, err := client.Validate(ctx, &proto.TokenData{Token: "Token"})
