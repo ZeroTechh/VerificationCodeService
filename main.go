@@ -26,7 +26,7 @@ func main() {
 		services.VerificationCodeService,
 		log,
 	)
-	proto.RegisterVerificationCodeServer(grpcServer, handler.Handler{)
+	proto.RegisterVerificationCodeServer(grpcServer, handler.Handler{})
 	if err := grpcServer.Serve(*listner); err != nil {
 		log.Fatal("Service Failed With Error", zap.Error(err))
 	}
